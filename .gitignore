@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+*.pyo
+*.pdb
+*.so
+*.egg
+*.egg-info/
+.dist-info/
+build/
+dist/
+.eggs/
+.Python
+pip-wheel-metadata/
+
+# Virtualenv
+venv/
+.venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+
+# Env
+.env
+
+# Artifacts
+artifacts/
+
+# Database
+*.db

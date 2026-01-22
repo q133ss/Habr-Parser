@@ -136,7 +136,33 @@ def init_db(conn: sqlite3.Connection) -> None:
         )
         """
     )
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS zen_posts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            article_url TEXT NOT NULL UNIQUE,
+            zen_title TEXT NOT NULL,
+            zen_lead TEXT,
+            zen_body TEXT NOT NULL,
+            selection_reason TEXT,
+            model TEXT,
+            created_at TEXT NOT NULL,
+            telegram_message_id TEXT,
+            telegram_sent_at TEXT
+        )
+        """
+    )
+    ensure_zen_columns(conn)
     conn.commit()
+
+
+def ensure_zen_columns(conn: sqlite3.Connection) -> None:
+    cursor = conn.execute("PRAGMA table_info(zen_posts)")
+    existing = {row[1] for row in cursor.fetchall()}
+    if "telegram_message_id" not in existing:
+        conn.execute("ALTER TABLE zen_posts ADD COLUMN telegram_message_id TEXT")
+    if "telegram_sent_at" not in existing:
+        conn.execute("ALTER TABLE zen_posts ADD COLUMN telegram_sent_at TEXT")
 
 
 def save_articles(conn: sqlite3.Connection, articles: Iterable[Article]) -> int:
